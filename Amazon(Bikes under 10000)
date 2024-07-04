@@ -1,0 +1,35 @@
+import csv
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import os
+downloads_path = os.path.join(os.path.expanduser('~'), 'Downloads')
+driver = webdriver.Chrome()
+driver.get("https://www.amazon.in/")
+search_input = driver.find_element(By.XPATH, "//input[@class='nav-input nav-progressive-attribute']")
+search_input.send_keys("mobiles under 10000")
+search_button = driver.find_element(By.XPATH, "//input[@type='submit' and @value='Go']")
+search_button.click()
+time.sleep(5)
+phone_elements = driver.find_elements(By.XPATH, "//div[@data-component-type='s-search-result']")
+csv_file_path = os.path.join(downloads_path, 'amazon_mobiles.csv')
+with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['Name', 'Rating', 'Price'])
+    for phone_element in phone_elements:
+        name_element = phone_element.find_element(By.XPATH, ".//span[@class='a-size-medium a-color-base a-text-normal']")
+        phone_name = name_element.text
+        try:
+            rating_element = phone_element.find_element(By.XPATH, ".//span[@class='a-icon-alt']")
+            phone_rating = rating_element.get_attribute('innerHTML')
+        except:
+            phone_rating = "No rating"
+        try:
+            price_element = phone_element.find_element(By.XPATH, ".//span[@class='a-price-whole']")
+            phone_price = price_element.text
+        except:
+            phone_price = "No price"
+        writer.writerow([phone_name, phone_rating, phone_price])
+
+driver.quit()
+print(f"Data saved to '{csv_file_path}'")
