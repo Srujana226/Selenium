@@ -1,0 +1,34 @@
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get(url="https://rahulshettyacademy.com/seleniumPractise/#/")
+time.sleep(5)
+driver.find_element(By.XPATH, "//input[@class='search-keyword']").send_keys("ber")
+driver.find_element(By.XPATH, "//button[@type='submit']").click()
+fruits=driver.find_elements(By.XPATH,"//div[@class='product']")
+c=0
+for fruit in fruits:
+    fruitname=fruit.find_element(by=By.CLASS_NAME,value="product-name").text
+    fruitprice=fruit.find_element(by=By.CLASS_NAME,value="product-price").text
+    print(fruitname)
+    print("price:",fruitprice)
+    fruitsadded= fruit.find_element(by=By.CLASS_NAME, value="product-action").click()
+    c=c+1
+print("fruits-added",c)
+driver.find_element(by=By.CLASS_NAME,value="cart-icon").click()
+driver.find_element(by=By.CLASS_NAME,value="action-block").click()
+time.sleep(5)
+driver.find_element(By.XPATH, "//input[@type='text']").send_keys("rahulshettyacademy")
+time.sleep(2)
+driver.find_element(by=By.CLASS_NAME, value="promoBtn").click()
+driver.find_element(By.XPATH,"//button[text()='Place Order']").click()
+driver.find_element(By.XPATH,"//select[@style='width: 200px;']").click()
+#driver.find_element(By.XPATH,"//select[@style='width: 200px;']").send_keys("india")
+#driver.find_element(By.XPATH,"//select[@style='width: 200px;']").click()
+driver.find_element(By.XPATH,"//option[text()='India']").click()
+time.sleep(2)
+driver.find_element(By.XPATH,"//input[@type='checkbox']").click()
+driver.find_element(By.XPATH,"//button[text()='Proceed']").click()
+time.sleep(10)
